@@ -137,6 +137,14 @@ Pull requests and pushes run `.github\workflows\audit.yml`, which executes the S
 
 Use `docs\skill_maker_behavior_evals.md` for lightweight manual prompts that check whether Skill Maker behaves correctly in common scenarios.
 
+## Project logs
+
+- `CHANGELOG.md`: user-facing changes by release state.
+- `docs\engineering_log.md`: chronological stage history, files changed, checks, results, and risks.
+- `docs\decision_log.md`: concise ADR-style decisions and consequences.
+- `docs\troubleshooting_log.md`: problems encountered, fixes, and prevention notes.
+- `docs\project_journal.md`: readable narrative overview and lessons learned.
+
 ## Project policies
 
 - License: `LICENSE`

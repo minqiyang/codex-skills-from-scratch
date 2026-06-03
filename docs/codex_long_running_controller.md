@@ -72,7 +72,24 @@ For each stage, Codex should:
 13. Commit only if explicitly permitted by the current user prompt or runbook stage.
 14. Do not proceed to the next stage if high or medium risks remain.
 
-## 6. Skill-first workflow
+## 6. Logging expectations
+
+Every meaningful stage should update the relevant project logs when appropriate.
+
+Meaningful stages include:
+
+- new features;
+- workflow changes;
+- safety rule changes;
+- audit failures and fixes;
+- install behavior changes;
+- public-facing documentation changes.
+
+Trivial typo fixes do not require detailed log entries.
+
+Codex should log decisions, implementation notes, problems, fixes, tradeoffs, and lessons learned. It should not write private chain-of-thought.
+
+## 7. Skill-first workflow
 
 Codex should decide whether the task deserves a Skill before creating or updating one.
 
@@ -85,7 +102,7 @@ When quality matters, separate production sessions from iteration sessions:
 - Production session: read the Skill, produce the artifact, then stop.
 - Iteration session: compare the artifact against a gold standard, update the Skill, then stop.
 
-## 7. Repo source vs installed location
+## 8. Repo source vs installed location
 
 Repo source location:
 
@@ -107,7 +124,7 @@ Codex global instruction file:
 
 `scripts\install.ps1` copies repo Skills into the installed user-level location. After initialization, this repo is the source of truth.
 
-## 8. Long-running stage queue
+## 9. Long-running stage queue
 
 Stage A: Audit and stabilize Skill Maker repo structure.
 
@@ -127,7 +144,11 @@ Stage H: Add evaluation prompts for Skill Maker behavior.
 
 Stage I: Review whether any example Skills should become real user-level Skills.
 
-## 9. Stop conditions
+Stage J: Improve path portability and public-readiness cleanup.
+
+Stage K: Add project logs and implementation history.
+
+## 10. Stop conditions
 
 Codex must stop and report if:
 
@@ -141,7 +162,7 @@ Codex must stop and report if:
 - the next decision is a product or governance decision;
 - a PR or merge decision is needed.
 
-## 10. Required final report format
+## 11. Required final report format
 
 Every stage must end with:
 
