@@ -4,6 +4,7 @@ This file records project problems and fixes. It does not include private chain-
 
 ## Windows command mismatch
 
+- Source: user-provided conversation record
 - Problem: Some common shell examples do not work consistently in Windows PowerShell or Windows CMD.
 - Symptoms: Commands such as `mkdir -p`, `touch`, and `~` can fail or behave differently from Unix shells.
 - Root cause: The project is Windows-first, while many generic examples assume Bash.
@@ -13,6 +14,7 @@ This file records project problems and fixes. It does not include private chain-
 
 ## Audit false positives for safety wording
 
+- Source: user-provided conversation record for the problem; git history for the refined audit behavior
 - Problem: The audit script could block safe documentation that mentioned expected safety patterns.
 - Symptoms: Expected `.gitignore` patterns and guardrail wording were reported as risk items.
 - Root cause: Keyword matching did not distinguish allowed documentation references from actual risky content.
@@ -22,6 +24,7 @@ This file records project problems and fixes. It does not include private chain-
 
 ## Placeholder Skill iteration prompt could not run as a real iteration
 
+- Source: user-provided conversation record
 - Problem: A Skill iteration prompt with placeholders is not actionable by itself.
 - Symptoms: The prompt names the needed inputs but cannot compare artifacts until the target Skill, original prompt, produced artifact, and reviewer-approved target are provided.
 - Root cause: Iteration mode requires concrete comparison evidence.
@@ -31,6 +34,7 @@ This file records project problems and fixes. It does not include private chain-
 
 ## Hard-coded personal paths created portability risk
 
+- Source: user-provided conversation record for the concern; git history for the cleanup commit
 - Problem: Beginner docs can become confusing if they imply the repo must live at one personal local path.
 - Symptoms: Local examples may look like required setup paths.
 - Root cause: Early Windows setup examples included machine-specific paths.

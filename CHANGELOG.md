@@ -7,6 +7,7 @@ This changelog follows a simple Keep a Changelog-style format.
 ### Added
 
 - Project logs for engineering history, decisions, troubleshooting notes, and reader-facing project narrative.
+- Backfilled project history with explicit source labels for Git-confirmed events and user-provided conversation-record context.
 
 ## [MVP] - 2026-06-02
 

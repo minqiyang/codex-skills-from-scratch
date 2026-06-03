@@ -2,9 +2,13 @@
 
 Codex Skills From Scratch started from a practical idea: make a Skill for writing Skills.
 
+Source: user-provided conversation record for the original framing; git history for the committed starter repo.
+
 The first version focused on Skill Maker, a meta Skill that helps decide when a task deserves a reusable Skill, how to keep that Skill concise, and how to update it only with verified lessons. From there, the project became a small starter repo for people who want a repeatable Codex Skill system instead of scattered prompts.
 
 The repo then added a dry-run-first installer and a static audit script. The installer makes the difference between repo source files and installed user-level Skills explicit. The audit script checks frontmatter, Markdown fences, duplicate Skill names, example installation state, and safety-reference classification.
+
+Source: git history confirms the initial files, installer, audit script, controller runbook, GitHub workflow docs, prompt-template updates, path portability cleanup, and CI audit workflow. The conversation record confirms that the user-level Skill Maker path was checked during audit mode and that path portability and public-readiness were identified as next-stage concerns before their cleanup stages.
 
 As the workflow became more structured, the project added a long-running controller runbook. That runbook treats Codex as a constrained stage runner: each stage has a bounded scope, local checks, a risk report, and a commit only when authorized. GitHub workflow docs and templates then made the repo easier to review through small pull requests and human approval gates.
 
