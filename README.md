@@ -1,6 +1,73 @@
-# Codex Skills Starter
+# Codex Skills From Scratch
 
-This folder is the local source-of-truth for reusable Codex Skill Maker files, templates, examples, and Windows helper scripts.
+Build your first reusable Codex Skill system from scratch.
+
+A beginner-friendly starter repo for creating, auditing, installing, and evolving Codex Skills.
+
+## What problem this solves
+
+Codex Skills are most useful when they capture repeatable workflows, quality standards, known pitfalls, and deterministic checks. Beginners often need a small, safe starting point that shows where Skills live, how to audit them, and how to evolve them without turning every note into a giant instruction file.
+
+This repo gives you that starting point.
+
+## What users get
+
+- A `skill-maker` Skill for creating, auditing, reviewing, and updating Skills.
+- A reusable task Skill template.
+- Prompt templates for common Skill Maker workflows.
+- A safe install script with dry-run behavior by default.
+- A local audit script for checking Skill structure and safety references.
+- Example Skills that are not installed unless you explicitly install them.
+- Controller and GitHub workflow docs for staged, human-supervised repo evolution.
+
+## Who this is for
+
+Use this repo if you are:
+
+- new to Codex Skills and want a working starter layout;
+- building a personal Codex workflow repo;
+- maintaining reusable prompts, templates, and audit scripts;
+- learning how to separate repo source files from installed user-level Skills;
+- experimenting with Skill iteration using artifacts and reviewer-approved examples.
+
+## Quick start
+
+1. Review the repo structure.
+2. Run a local audit:
+
+```powershell
+.\scripts\audit-skills.ps1
+```
+
+3. Preview installation:
+
+```powershell
+.\scripts\install.ps1
+```
+
+4. Install only when ready:
+
+```powershell
+.\scripts\install.ps1 -Install
+```
+
+5. In Codex, mention `$skill-maker` when creating, auditing, or updating a Skill.
+
+## Safe usage rules
+
+- Do not read, write, print, commit, or summarize secrets, tokens, `.env` files, credential files, or private keys.
+- Do not modify `config.toml` unless you explicitly intend to.
+- Do not install software unless you explicitly approve it.
+- Do not use the internet unless you explicitly approve it.
+- Do not turn example Skills into installed Skills unless you explicitly choose to.
+- Do not create or update Skills for trivial one-off tasks.
+- Only write verified, reusable lessons into Skills.
+
+## Install and audit workflow
+
+Repo source location:
+
+- `D:\Users\MINQI\Documents\skills`
 
 Installed Codex locations:
 
@@ -14,7 +81,21 @@ Repo source locations:
 - Canonical task Skill template: `templates\task-skill-template.md`
 - Example Skill: `examples\market-research\SKILL.md`
 
-`examples\market-research` is only an example. It should not become a real callable Skill unless it is explicitly installed into `.agents\skills`.
+`scripts\install.ps1` defaults to dry-run mode. It only copies `skills\skill-maker\SKILL.md` to `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md` when `-Install` is provided.
+
+`scripts\audit-skills.ps1` checks frontmatter, duplicate Skill names, Markdown code fences, expected safety references, and possible risk patterns.
+
+## What this is not
+
+- Not an official OpenAI repo.
+- Not a giant Skill catalog.
+- Not a secret manager.
+- Not a place for API keys.
+- Not an autonomous agent without human supervision.
+
+## Repository name rationale
+
+`codex-skills-from-scratch` is searchable, beginner-friendly, and clear. It names the core topic (`codex-skills`), signals that the repo starts from first principles (`from-scratch`), and avoids implying that this is an official or exhaustive Skill collection.
 
 ## Recommended workflow
 
@@ -28,19 +109,9 @@ Repo source locations:
 
 Use `docs\codex_long_running_controller.md` as the stage runner runbook when a future Codex session should advance this repo with minimal supervisor back-and-forth.
 
-## Windows helper scripts
+## GitHub workflow
 
-Run scripts from PowerShell:
-
-```powershell
-.\scripts\audit-skills.ps1
-.\scripts\install.ps1
-.\scripts\install.ps1 -Install
-```
-
-`install.ps1` defaults to dry-run mode. It only copies `skills\skill-maker\SKILL.md` to `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md` when `-Install` is provided.
-
-install.ps1 defaults to dry-run mode.
+Use `docs\github_workflow.md` for the private GitHub setup checklist, PR approval gates, and Codex review workflow.
 
 ## Manual verification
 
