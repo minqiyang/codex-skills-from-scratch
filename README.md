@@ -135,6 +135,12 @@ Use `docs\github_workflow.md` for the private GitHub setup checklist, PR approva
 
 Use `docs\skill_maker_behavior_evals.md` for lightweight manual prompts that check whether Skill Maker behaves correctly in common scenarios.
 
+## Project policies
+
+- License: `LICENSE`
+- Contribution guide: `CONTRIBUTING.md`
+- Safety reporting: `SECURITY.md`
+
 ## Manual verification
 
 Inside Codex, run `/skills` or explicitly mention `$skill-maker`.
