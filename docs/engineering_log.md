@@ -119,5 +119,17 @@ This log records meaningful project stages. It is factual project history, not p
 - Checks run: `.\scripts\audit-skills.ps1`, `git diff --check`, Markdown fence check for changed Markdown files, and `git status --short --untracked-files=all`
 - Result: Project logs now distinguish `Source: git history` from `Source: user-provided conversation record`.
 - Risks: Conversation-sourced entries have lower confidence than Git-confirmed entries and should not introduce exact commit hashes unless Git confirms them.
+- Commit hash: `33f5634`
+- Next recommended stage: Fix CI audit compatibility for GitHub Actions.
+
+## 2026-06-03 - CI audit mode compatibility
+
+- Source: GitHub Actions run evidence and current repair stage
+- Stage name: CI compatibility repair stage
+- Goal: Fix the public GitHub Actions audit failure without weakening local audit safety.
+- Files changed: `scripts\audit-skills.ps1`, `.github\workflows\audit.yml`, `README.md`, `docs\troubleshooting_log.md`, `docs\engineering_log.md`, `CHANGELOG.md`
+- Checks run: Local and CI audit modes, `git diff --check`, Markdown fence check for changed Markdown files, PowerShell syntax check, `scripts\install.ps1` dry-run, diff review, and `git status --short --untracked-files=all`
+- Result: Audit script now supports Local and CI modes. Local mode remains strict about user-level Skill Maker installation; CI mode skips that local installation check and audits repo source structure.
+- Risks: `pwsh` was not available in the local shell, so local script execution used Windows PowerShell; GitHub Actions still uses `pwsh`.
 - Commit hash: pending; a commit cannot include its own final hash.
-- Next recommended stage: Run final read-only release audit and decide whether to push.
+- Next recommended stage: Push and verify the GitHub Actions audit run.

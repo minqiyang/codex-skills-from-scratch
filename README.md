@@ -103,6 +103,8 @@ Repo source locations:
 
 `scripts\audit-skills.ps1` checks frontmatter, duplicate Skill names, Markdown code fences, expected safety references, and possible risk patterns.
 
+Local audit mode also checks the installed user-level Skill Maker. CI audit mode checks repo source structure only, because GitHub Actions runners do not have your local Codex Skill installation.
+
 ## What this is not
 
 - Not an official OpenAI repo.

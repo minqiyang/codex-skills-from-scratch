@@ -41,3 +41,13 @@ This file records project problems and fixes. It does not include private chain-
 - Fix: Replace required paths with `<repo-root>`, `%USERPROFILE%\.agents\skills`, and `%USERPROFILE%\.codex\AGENTS.md`; keep one path only as a labeled example.
 - Prevention: Use portable placeholders in docs and reserve machine-specific paths for clearly labeled examples.
 - Related files: `README.md`, `docs\codex_long_running_controller.md`, `prompt-templates.md`
+
+## GitHub Actions audit required local Skill installation
+
+- Source: GitHub Actions run evidence and local repo history
+- Problem: GitHub Actions audit failed because the user-level Skill Maker path was missing on the CI runner.
+- Symptoms: The `Audit` workflow failed during `scripts\audit-skills.ps1` with the user-level Skill Maker check reported as a risk.
+- Root cause: The audit script mixed local installation checks with repo-source checks.
+- Fix: Add `Local` and `CI` audit modes. Local mode remains strict about the installed user-level Skill Maker. CI mode audits repo source structure without requiring the local user-level installation.
+- Prevention: GitHub Actions runs `scripts\audit-skills.ps1 -Mode CI`; local audits use Local mode by default.
+- Related files: `scripts\audit-skills.ps1`, `.github\workflows\audit.yml`

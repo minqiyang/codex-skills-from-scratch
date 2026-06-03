@@ -1,13 +1,26 @@
 [CmdletBinding()]
-param()
+param(
+    [ValidateSet('Local', 'CI')]
+    [string]$Mode
+)
 
 $ErrorActionPreference = 'Stop'
+
+if (-not $PSBoundParameters.ContainsKey('Mode')) {
+    if ($env:GITHUB_ACTIONS -eq 'true') {
+        $Mode = 'CI'
+    } else {
+        $Mode = 'Local'
+    }
+}
 
 $ScriptPath = if ($PSCommandPath) { $PSCommandPath } else { $MyInvocation.MyCommand.Path }
 $ScriptsDir = Split-Path -Parent $ScriptPath
 $RepoRoot = Split-Path -Parent $ScriptsDir
 $UserSkillMaker = Join-Path $env:USERPROFILE '.agents\skills\skill-maker\SKILL.md'
 $ExampleInstallTarget = Join-Path $env:USERPROFILE '.agents\skills\market-research\SKILL.md'
+$RepoSource = Join-Path $RepoRoot 'skills\skill-maker\SKILL.md'
+$InstallScript = Join-Path $RepoRoot 'scripts\install.ps1'
 
 $Pass = New-Object System.Collections.Generic.List[string]
 $AllowedReference = New-Object System.Collections.Generic.List[string]
@@ -82,7 +95,7 @@ if (Test-Path -LiteralPath $RepoRoot) {
 }
 
 $SkillFiles = @($RepoSkillFiles)
-if (Test-Path -LiteralPath $UserSkillMaker -PathType Leaf) {
+if ($Mode -eq 'Local' -and (Test-Path -LiteralPath $UserSkillMaker -PathType Leaf)) {
     $SkillFiles += Get-Item -LiteralPath $UserSkillMaker
 }
 
@@ -117,13 +130,28 @@ if (-not $RepoNameGroups) {
     Add-Pass 'No duplicate Skill names inside repo.'
 }
 
-$UserSkillMakerMatches = @($Metadata | Where-Object {
-    $_.Path -ieq $UserSkillMaker -and $_.Name -eq 'skill-maker'
-})
-if ($UserSkillMakerMatches.Count -eq 1) {
-    Add-Pass 'Exactly one official user-level skill-maker was found at the expected path.'
+$UserSkillMakerMatches = @()
+if ($Mode -eq 'Local') {
+    $UserSkillMakerMatches = @($Metadata | Where-Object {
+        $_.Path -ieq $UserSkillMaker -and $_.Name -eq 'skill-maker'
+    })
+    if ($UserSkillMakerMatches.Count -eq 1) {
+        Add-Pass 'Exactly one official user-level skill-maker was found at the expected path.'
+    } else {
+        Add-Risk 'Official user-level skill-maker was not found exactly once at the expected path.'
+    }
+
+    if ((Test-Path -LiteralPath $RepoSource -PathType Leaf) -and (Test-Path -LiteralPath $UserSkillMaker -PathType Leaf)) {
+        $RepoHash = (Get-FileHash -LiteralPath $RepoSource -Algorithm SHA256).Hash
+        $UserHash = (Get-FileHash -LiteralPath $UserSkillMaker -Algorithm SHA256).Hash
+        if ($RepoHash -eq $UserHash) {
+            Add-Pass 'User-level skill-maker matches the repo source copy.'
+        } else {
+            Add-Risk 'User-level skill-maker differs from the repo source copy.'
+        }
+    }
 } else {
-    Add-Risk 'Official user-level skill-maker was not found exactly once at the expected path.'
+    Add-Info "CI mode skips user-level Skill Maker install check: $UserSkillMaker"
 }
 
 if (Test-Path -LiteralPath $ExampleInstallTarget -PathType Leaf) {
@@ -218,7 +246,7 @@ $CandidateFiles = @(Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Force |
     $_.FullName -notlike '*\.git\*'
 })
 
-if (Test-Path -LiteralPath $UserSkillMaker -PathType Leaf) {
+if ($Mode -eq 'Local' -and (Test-Path -LiteralPath $UserSkillMaker -PathType Leaf)) {
     $CandidateFiles += Get-Item -LiteralPath $UserSkillMaker
 }
 
@@ -254,17 +282,33 @@ if (-not ($Risk | Where-Object { $_ -like 'Possible secret*' -or $_ -like 'Sensi
     Add-Pass 'No actual sensitive content risks found in audited files.'
 }
 
-$RepoSource = Join-Path $RepoRoot 'skills\skill-maker\SKILL.md'
 if (Test-Path -LiteralPath $RepoSource -PathType Leaf) {
     Add-Pass "Repo Skill Maker source exists: $RepoSource"
 } else {
     Add-Risk "Repo Skill Maker source is missing: $RepoSource"
 }
 
+if (Test-Path -LiteralPath $InstallScript -PathType Leaf) {
+    Add-Pass "Install script exists: $InstallScript"
+    $InstallText = Get-Content -LiteralPath $InstallScript -Raw -Encoding UTF8
+    if (
+        $InstallText -match '\[switch\]\$Install' -and
+        $InstallText -match 'dry-run' -and
+        $InstallText -match 'if\s*\(\s*-not\s+\$Install\.IsPresent\s*\)'
+    ) {
+        Add-Pass 'Install script defaults to dry-run unless -Install is provided.'
+    } else {
+        Add-Risk 'Install script dry-run default could not be verified.'
+    }
+} else {
+    Add-Risk "Install script is missing: $InstallScript"
+}
+
 Add-Info "Repo root: $RepoRoot"
 Add-Info "User-level Skill Maker path: $UserSkillMaker"
 
 Write-Output 'Codex Skills audit summary'
+Write-Output "Audit mode: $Mode"
 Write-Output ''
 Write-Output 'Pass items:'
 foreach ($Item in $Pass) {
