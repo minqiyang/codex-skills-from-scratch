@@ -89,7 +89,13 @@ When quality matters, separate production sessions from iteration sessions:
 
 Repo source location:
 
+- `<repo-root>`
+
+Example local repo path on one Windows machine:
+
 - `D:\Users\MINQI\Documents\skills`
+
+This example path is not required. Use the actual cloned repo root for the current machine.
 
 Installed user-level Skill location:
 

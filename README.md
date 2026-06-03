@@ -63,11 +63,29 @@ Use this repo if you are:
 - Do not create or update Skills for trivial one-off tasks.
 - Only write verified, reusable lessons into Skills.
 
-## Install and audit workflow
+## Path model
 
 Repo source location:
 
+- `<repo-root>`
+
+Installed user-level Skills:
+
+- `%USERPROFILE%\.agents\skills`
+
+Codex global instructions:
+
+- `%USERPROFILE%\.codex\AGENTS.md`
+
+`scripts\install.ps1` copies from the repo source to the installed user-level Skill location.
+
+Example local repo path on one Windows machine:
+
 - `D:\Users\MINQI\Documents\skills`
+
+This is only an example. Your clone can live anywhere.
+
+## Install and audit workflow
 
 Installed Codex locations:
 

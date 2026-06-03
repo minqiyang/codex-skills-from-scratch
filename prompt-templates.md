@@ -42,7 +42,7 @@
 请使用 $skill-maker，为下面这个可复用任务先创建一个最小可用 Skill，然后按该 Skill 执行任务。完成后只把本次验证过的经验更新回 Skill。
 
 Skill 存放位置：
-<个人全局：~/.agents/skills/<name>/SKILL.md；或项目级：.agents/skills/<name>/SKILL.md>
+<个人全局 Windows：%USERPROFILE%\.agents\skills\<name>\SKILL.md；或项目级：.agents\skills\<name>\SKILL.md>
 
 任务是：
 <你的任务>
