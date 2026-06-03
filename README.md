@@ -24,6 +24,10 @@ Repo source locations:
 4. Put personal cross-project Skills in `%USERPROFILE%\.agents\skills\<skill-name>\SKILL.md`.
 5. Put project-specific Skills in `.agents\skills\<skill-name>\SKILL.md` inside that project.
 
+## Long-running controller
+
+Use `docs\codex_long_running_controller.md` as the stage runner runbook when a future Codex session should advance this repo with minimal supervisor back-and-forth.
+
 ## Windows helper scripts
 
 Run scripts from PowerShell:

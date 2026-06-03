@@ -10,6 +10,7 @@ $UserSkillMaker = Join-Path $env:USERPROFILE '.agents\skills\skill-maker\SKILL.m
 $ExampleInstallTarget = Join-Path $env:USERPROFILE '.agents\skills\market-research\SKILL.md'
 
 $Pass = New-Object System.Collections.Generic.List[string]
+$AllowedReference = New-Object System.Collections.Generic.List[string]
 $Risk = New-Object System.Collections.Generic.List[string]
 $Info = New-Object System.Collections.Generic.List[string]
 
@@ -23,9 +24,24 @@ function Add-Risk {
     $Risk.Add($Message) | Out-Null
 }
 
+function Add-AllowedReference {
+    param([string]$Message)
+    $AllowedReference.Add($Message) | Out-Null
+}
+
 function Add-Info {
     param([string]$Message)
     $Info.Add($Message) | Out-Null
+}
+
+function Get-RepoRelativePath {
+    param([string]$Path)
+
+    if ($Path.StartsWith($RepoRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $Path.Substring($RepoRoot.Length).TrimStart([char[]]@('\', '/'))
+    }
+
+    return $Path
 }
 
 function Get-SkillMetadata {
@@ -116,27 +132,126 @@ if (Test-Path -LiteralPath $ExampleInstallTarget -PathType Leaf) {
     Add-Pass 'Example market-research is not installed as a callable user Skill.'
 }
 
-$NameSkipPattern = '(?i)(^' + '\.' + 'env$|se' + 'cret|credential|private|key|to' + 'ken|pass' + 'word)'
-$KeywordPattern = '(?i)(to' + 'ken|api' + '_key|pass' + 'word|se' + 'cret|\.' + 'env)'
-$ScanFiles = Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Include '*.md','*.ps1'
-if (Test-Path -LiteralPath $UserSkillMaker -PathType Leaf) {
-    $ScanFiles += Get-Item -LiteralPath $UserSkillMaker
+$AllowedGitIgnorePatterns = @(
+    '.env',
+    '*.env',
+    '*.key',
+    '*.pem',
+    '*token*',
+    '*secret*',
+    'credentials*',
+    'backup/',
+    '*.bak',
+    '__pycache__/',
+    '.pytest_cache/',
+    '.DS_Store',
+    'Thumbs.db'
+)
+
+function Test-SensitiveFileName {
+    param([System.IO.FileInfo]$File)
+
+    $Name = $File.Name.ToLowerInvariant()
+    return (
+        $Name -eq '.env' -or
+        $Name.EndsWith('.env') -or
+        $Name.EndsWith('.key') -or
+        $Name.EndsWith('.pem') -or
+        $Name.Contains('token') -or
+        $Name.Contains('secret') -or
+        $Name.StartsWith('credentials') -or
+        ($Name.Contains('private') -and $Name.Contains('key'))
+    )
 }
 
-foreach ($File in $ScanFiles | Sort-Object FullName -Unique) {
-    if ($File.Name -match $NameSkipPattern) {
-        Add-Risk "Suspicious file name was not opened: $($File.FullName)"
+function Test-SecretAssignmentLine {
+    param([string]$Line)
+
+    $SecretNamePattern = '(api[_-]?key|apikey|token|password|secret|credential)'
+    $AssignmentPattern = '(?i)\b' + $SecretNamePattern + '\b\s*[:=]\s*[''"]?[^''"\s<#][^#\r\n]{3,}'
+    return ($Line -match $AssignmentPattern)
+}
+
+function Get-AllowedReferenceReason {
+    param(
+        [System.IO.FileInfo]$File,
+        [string]$Line
+    )
+
+    $Trimmed = $Line.Trim()
+    $RelativePath = Get-RepoRelativePath -Path $File.FullName
+
+    if ($File.Name -eq '.gitignore' -and ($AllowedGitIgnorePatterns -contains $Trimmed)) {
+        return 'expected .gitignore exclusion pattern'
+    }
+
+    if ($RelativePath -like 'docs\*' -or $File.Name -in @('README.md', 'prompt-templates.md')) {
+        $Lower = $Trimmed.ToLowerInvariant()
+        if (
+            $Lower -match '\bdo not\b' -or
+            $Lower -match '\bnot\b' -or
+            $Lower -match '\bwithout\b' -or
+            $Lower -match '\bunless\b' -or
+            $Lower -match '\bexclude' -or
+            $Lower -match '\bignore' -or
+            $Lower -match '\bguardrail' -or
+            $Lower -match '\bchecklist' -or
+            $Lower -match '\bstop\b' -or
+            $Lower -match '\bencountered\b' -or
+            $Lower -match '\bhandling credentials\b' -or
+            $Lower -match '\bno secret'
+        ) {
+            return 'approved safety documentation or guardrail wording'
+        }
+    }
+
+    if ($File.Name -eq 'audit-skills.ps1') {
+        return 'audit rule definition'
+    }
+
+    return $null
+}
+
+$KeywordPattern = '(?i)(token|api[_-]?key|apikey|password|secret|\.' + 'env|credential file|private key)'
+$ScanFiles = @()
+$CandidateFiles = @(Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Force | Where-Object {
+    $_.FullName -notlike '*\.git\*'
+})
+
+if (Test-Path -LiteralPath $UserSkillMaker -PathType Leaf) {
+    $CandidateFiles += Get-Item -LiteralPath $UserSkillMaker
+}
+
+foreach ($File in $CandidateFiles | Sort-Object FullName -Unique) {
+    if (Test-SensitiveFileName -File $File) {
+        Add-Risk "Sensitive-looking file was not opened: $($File.FullName)"
         continue
     }
 
-    $Hits = Select-String -LiteralPath $File.FullName -Pattern $KeywordPattern -CaseSensitive:$false -ErrorAction SilentlyContinue
-    foreach ($Hit in $Hits) {
-        Add-Risk "Sensitive keyword candidate in $($Hit.Path): line $($Hit.LineNumber)"
+    if ($File.Extension -in @('.md', '.ps1') -or $File.Name -eq '.gitignore') {
+        $ScanFiles += $File
     }
 }
 
-if (-not ($Risk | Where-Object { $_ -like 'Sensitive keyword candidate*' -or $_ -like 'Suspicious file name*' })) {
-    Add-Pass 'No obvious sensitive keyword candidates found in audited text files.'
+foreach ($File in $ScanFiles | Sort-Object FullName -Unique) {
+    $Hits = Select-String -LiteralPath $File.FullName -Pattern $KeywordPattern -CaseSensitive:$false -ErrorAction SilentlyContinue
+    foreach ($Hit in $Hits) {
+        if (Test-SecretAssignmentLine -Line $Hit.Line) {
+            Add-Risk "Possible secret assignment in $($Hit.Path): line $($Hit.LineNumber)"
+            continue
+        }
+
+        $AllowedReason = Get-AllowedReferenceReason -File (Get-Item -LiteralPath $Hit.Path) -Line $Hit.Line
+        if ($AllowedReason) {
+            Add-AllowedReference "$($Hit.Path) ($AllowedReason)"
+        } else {
+            Add-Risk "Sensitive keyword candidate in $($Hit.Path): line $($Hit.LineNumber)"
+        }
+    }
+}
+
+if (-not ($Risk | Where-Object { $_ -like 'Possible secret*' -or $_ -like 'Sensitive keyword*' -or $_ -like 'Sensitive-looking file*' })) {
+    Add-Pass 'No actual sensitive content risks found in audited files.'
 }
 
 $RepoSource = Join-Path $RepoRoot 'skills\skill-maker\SKILL.md'
@@ -157,6 +272,16 @@ foreach ($Item in $Pass) {
 }
 
 Write-Output ''
+Write-Output 'Allowed references:'
+if ($AllowedReference.Count -eq 0) {
+    Write-Output 'ALLOWED_REFERENCE: none'
+} else {
+    foreach ($Group in ($AllowedReference | Group-Object | Sort-Object Name)) {
+        Write-Output "ALLOWED_REFERENCE: $($Group.Name) [$($Group.Count) match(es)]"
+    }
+}
+
+Write-Output ''
 Write-Output 'Risk items:'
 if ($Risk.Count -eq 0) {
     Write-Output 'RISK: none'
@@ -170,4 +295,8 @@ Write-Output ''
 Write-Output 'Info:'
 foreach ($Item in $Info) {
     Write-Output "INFO: $Item"
+}
+
+if ($Risk.Count -gt 0) {
+    exit 1
 }

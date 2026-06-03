@@ -47,3 +47,40 @@ Skill 存放位置：
 任务是：
 <你的任务>
 ```
+
+## Skill iteration workflow
+
+Use this when quality matters and you want to separate artifact production from Skill improvement.
+
+### Production session
+
+```text
+Use $<skill-name> in production mode.
+
+Read the Skill and produce the requested artifact only.
+Do not update the Skill in this session.
+Do not compare against a gold standard in this session.
+
+Artifact request:
+<the artifact to produce>
+```
+
+### Iteration session
+
+```text
+Use $skill-maker in iteration mode.
+
+Inputs:
+- Skill to evaluate: $<skill-name>
+- Artifact produced by the production session:
+  <artifact>
+- Gold standard or reviewer-approved target:
+  <gold standard>
+
+Task:
+1. Compare the artifact against the gold standard.
+2. Identify only reusable, verified gaps in the Skill.
+3. Update the Skill only if the lesson is stable enough for future tasks.
+4. Do not rewrite the artifact unless explicitly asked.
+5. Report what changed in the Skill and why.
+```
