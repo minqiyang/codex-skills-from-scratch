@@ -1,0 +1,21 @@
+name: Audit
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  audit:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run Skill audit
+        shell: pwsh
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\audit-skills.ps1
+
+      - name: Check diff formatting
+        shell: pwsh
+        run: git diff --check
