@@ -131,6 +131,10 @@ Use `docs\codex_long_running_controller.md` as the stage runner runbook when a f
 
 Use `docs\github_workflow.md` for the private GitHub setup checklist, PR approval gates, and Codex review workflow.
 
+## Skill Maker behavior evals
+
+Use `docs\skill_maker_behavior_evals.md` for lightweight manual prompts that check whether Skill Maker behaves correctly in common scenarios.
+
 ## Manual verification
 
 Inside Codex, run `/skills` or explicitly mention `$skill-maker`.
