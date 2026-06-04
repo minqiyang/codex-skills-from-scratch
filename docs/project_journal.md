@@ -16,6 +16,8 @@ The repo later shifted toward beginner-friendly GitHub readiness. The README was
 
 v0.1.0 marks the first public MVP release. By that point, the project had moved from a local "Skill for writing Skills" setup into a public starter repo with release notes, a changelog, public-readiness docs, Local and CI audit modes, an annotated tag, and a GitHub Release. The release kept the scope intentionally small: a reusable Skill Maker system, safe install and audit workflows, beginner docs, and project history rather than a large catalog of finished Skills.
 
+After v0.1.0, the public landing page was tightened around discoverability: a faster first screen, a 10-minute beginner path, a clearer explanation of why the repo exists, and a compact summary of what makes the repo different.
+
 ## Lessons learned
 
 - Externalize repeatable workflow knowledge before execution when the task is likely to recur.

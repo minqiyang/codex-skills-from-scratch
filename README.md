@@ -4,39 +4,36 @@ Build your first reusable Codex Skill system from scratch.
 
 A beginner-friendly starter repo for creating, auditing, installing, and evolving Codex Skills.
 
-## What problem this solves
+Latest release: [v0.1.0](docs/release_notes_v0.1.0.md)
 
-Codex Skills are most useful when they capture repeatable workflows, quality standards, known pitfalls, and deterministic checks. Beginners often need a small, safe starting point that shows where Skills live, how to audit them, and how to evolve them without turning every note into a giant instruction file.
+## Start Here
 
-This repo gives you that starting point.
+Use this repo if you want a small working system for turning repeatable Codex work into reusable Skills, scripts, prompts, logs, and checks.
 
-## What users get
+### Who this is for
 
-- A `skill-maker` Skill for creating, auditing, reviewing, and updating Skills.
+- Beginners who want a clear first Codex Skills setup.
+- Builders who want reusable personal or project-specific Codex workflows.
+- Maintainers who want Skill changes to be auditable, reviewable, and reversible.
+- Users who want examples and templates without automatically installing extra Skills.
+
+### What users get
+
+- A `skill-maker` meta Skill for creating, auditing, reviewing, and updating Skills.
 - A reusable task Skill template.
 - Prompt templates for common Skill Maker workflows.
-- A safe install script with dry-run behavior by default.
-- A local audit script for checking Skill structure and safety references.
+- A dry-run-first installer for the user-level Skill Maker.
+- Local and CI audit modes for checking structure and safety references.
 - Example Skills that are not installed unless you explicitly install them.
-- Controller and GitHub workflow docs for staged, human-supervised repo evolution.
+- Persistent project logs, release notes, and supervised workflow docs.
 
-## Who this is for
+### Quick start: 10-minute path
 
-Use this repo if you are:
-
-- new to Codex Skills and want a working starter layout;
-- building a personal Codex workflow repo;
-- maintaining reusable prompts, templates, and audit scripts;
-- learning how to separate repo source files from installed user-level Skills;
-- experimenting with Skill iteration using artifacts and reviewer-approved examples.
-
-## Quick start
-
-1. Review the repo structure.
-2. Run a local audit:
+1. Clone or open the repo, then review the structure and safety rules.
+2. Run the repo-source audit before installation:
 
 ```powershell
-.\scripts\audit-skills.ps1
+.\scripts\audit-skills.ps1 -Mode CI
 ```
 
 3. Preview installation:
@@ -45,13 +42,40 @@ Use this repo if you are:
 .\scripts\install.ps1
 ```
 
-4. Install only when ready:
+4. Install only after reviewing the dry-run, then run the local install audit:
 
 ```powershell
 .\scripts\install.ps1 -Install
+.\scripts\audit-skills.ps1 -Mode Local
 ```
 
-5. In Codex, mention `$skill-maker` when creating, auditing, or updating a Skill.
+5. In Codex, mention `$skill-maker` for your first repeatable task.
+
+### Safety promise
+
+- Dry-run first: `scripts\install.ps1` changes nothing unless `-Install` is provided.
+- No secrets: this repo is not a place for sensitive values, `.env` contents, credentials, or private keys.
+- Examples stay separate: example Skills are not installed by default.
+- CI included: pushes and pull requests run the audit workflow.
+
+## Why This Repo Exists
+
+Fresh Codex sessions do not automatically carry every project lesson forward unless reusable workflow knowledge is externalized. This repo gives beginners a concrete way to turn those lessons into Skills, scripts, prompts, logs, and release discipline instead of starting from a blank page.
+
+## What Makes This Different
+
+- Skill Maker is a meta Skill for building and improving other Skills.
+- Local audit mode checks the installed user-level Skill Maker; CI mode checks repo source structure.
+- `install.ps1` defaults to dry-run.
+- Examples stay separate from installed Skills.
+- Project logs and handoff context preserve decisions across sessions.
+- The long-running controller supports supervised Codex workflows.
+
+## What problem this solves
+
+Codex Skills are most useful when they capture repeatable workflows, quality standards, known pitfalls, and deterministic checks. Beginners often need a small, safe starting point that shows where Skills live, how to audit them, and how to evolve them without turning every note into a giant instruction file.
+
+This repo gives you that starting point.
 
 ## Safe usage rules
 
