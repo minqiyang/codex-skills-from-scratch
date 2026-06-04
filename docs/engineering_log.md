@@ -133,3 +133,17 @@ This log records meaningful project stages. It is factual project history, not p
 - Risks: `pwsh` was not available in the local shell, so local script execution used Windows PowerShell; GitHub Actions still uses `pwsh`.
 - Commit hash: pending; a commit cannot include its own final hash.
 - Next recommended stage: Push and verify the GitHub Actions audit run.
+
+## 2026-06-04 - v0.1.0 public release
+
+- Source: git tag, GitHub Release metadata, GitHub Actions run evidence, and local audit results
+- Stage name: v0.1.0 tag and GitHub Release stage
+- Goal: Publish the first public MVP release after confirming the release-prep commit and CI status.
+- Files changed: none during release publication; release notes were already committed in `840f207`.
+- Checks run: Local audit mode, CI audit mode, `git diff --check`, tracked Markdown fence check, tag existence checks, release notes presence check, changelog `v0.1.0` section check, and latest GitHub Actions Audit run verification.
+- Result: Annotated tag `v0.1.0` was created and pushed. GitHub Release `v0.1.0` was created at `https://github.com/minqiyang/codex-skills-from-scratch/releases/tag/v0.1.0`.
+- Tag target commit: `840f2078169c1d9193b8572db260451b7bfc07ca`
+- GitHub Actions: latest relevant Audit workflow passed on the release commit before publication.
+- Risks: Low-risk GitHub Actions notice remains for `actions/checkout@v4` running on Node.js 20.
+- Commit hash: not applicable for release publication; tag target is `840f207`.
+- Next recommended stage: Optional maintenance polish for GitHub Actions runner deprecation notice.
