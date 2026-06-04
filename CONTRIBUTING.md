@@ -12,10 +12,10 @@ Keep contributions small, auditable, and easy for a beginner to understand.
 git status --short --untracked-files=all
 ```
 
-2. Run the local audit:
+2. Run the repo-source audit before installation:
 
 ```powershell
-.\scripts\audit-skills.ps1
+.\scripts\audit-skills.ps1 -Mode CI
 ```
 
 3. Preview installation before any real install:
@@ -25,6 +25,12 @@ git status --short --untracked-files=all
 ```
 
 `install.ps1` is dry-run by default. Use `-Install` only when you intend to copy the repo Skill into the user-level Skills location.
+
+After installing Skill Maker, run the local install audit:
+
+```powershell
+.\scripts\audit-skills.ps1 -Mode Local
+```
 
 ## Safety rules
 
@@ -40,7 +46,7 @@ When changing a Skill:
 - keep the change minimal;
 - prefer success criteria, known pitfalls, deterministic tools, and verification;
 - avoid speculative lessons;
-- run `.\scripts\audit-skills.ps1`;
+- run `.\scripts\audit-skills.ps1 -Mode CI` before install-related changes and `.\scripts\audit-skills.ps1 -Mode Local` after installing Skill Maker;
 - explain why the lesson is reusable.
 
 ## Pull requests

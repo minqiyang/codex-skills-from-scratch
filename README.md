@@ -1,5 +1,9 @@
 # Codex Skills From Scratch
 
+[![Audit](https://github.com/minqiyang/codex-skills-from-scratch/actions/workflows/audit.yml/badge.svg)](https://github.com/minqiyang/codex-skills-from-scratch/actions/workflows/audit.yml)
+[![Release](https://img.shields.io/github/v/release/minqiyang/codex-skills-from-scratch?label=release)](https://github.com/minqiyang/codex-skills-from-scratch/releases)
+[![License](https://img.shields.io/github/license/minqiyang/codex-skills-from-scratch)](LICENSE)
+
 Build your first reusable Codex Skill system from scratch.
 
 A beginner-friendly starter repo for creating, auditing, installing, and evolving Codex Skills.
@@ -50,6 +54,19 @@ Use this repo if you want a small working system for turning repeatable Codex wo
 ```
 
 5. In Codex, mention `$skill-maker` for your first repeatable task.
+
+### Safe terminal demo
+
+This is the intended beginner path. The first two commands do not install anything.
+
+```powershell
+.\scripts\audit-skills.ps1 -Mode CI
+.\scripts\install.ps1
+.\scripts\install.ps1 -Install
+.\scripts\audit-skills.ps1 -Mode Local
+```
+
+The `-Install` command is the first command that copies Skill Maker into your user-level Codex Skills folder. Run it only after the dry-run output looks right.
 
 ### Safety promise
 

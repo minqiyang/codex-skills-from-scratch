@@ -49,10 +49,10 @@ This release is for people who want to:
 ## Safe quick start
 
 1. Clone the repo.
-2. Run the local audit:
+2. Run the repo-source audit before installation:
 
 ```powershell
-.\scripts\audit-skills.ps1
+.\scripts\audit-skills.ps1 -Mode CI
 ```
 
 3. Preview installation:
@@ -61,18 +61,19 @@ This release is for people who want to:
 .\scripts\install.ps1
 ```
 
-4. Install only when ready:
+4. Install only when ready, then verify the user-level install:
 
 ```powershell
 .\scripts\install.ps1 -Install
+.\scripts\audit-skills.ps1 -Mode Local
 ```
 
 5. In Codex, mention `$skill-maker` when creating, auditing, or updating a Skill.
 
 ## Verification checklist
 
-- Local audit passes with `RISK: none`.
-- CI audit passes with `RISK: none`.
+- CI audit passes with `RISK: none` before installation.
+- Local audit passes with `RISK: none` after installing Skill Maker.
 - `git diff --check` passes.
 - Markdown code fences are balanced.
 - `scripts\install.ps1` runs in dry-run mode by default.
