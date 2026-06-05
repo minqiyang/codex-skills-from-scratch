@@ -6,11 +6,12 @@ on:
 
 jobs:
   audit:
-    runs-on: windows-latest
+    # Test against the announced Windows Server 2025 + Visual Studio 2026 runner image.
+    runs-on: windows-2025-vs2026
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Skill audit
         shell: pwsh

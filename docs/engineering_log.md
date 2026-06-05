@@ -147,3 +147,15 @@ This log records meaningful project stages. It is factual project history, not p
 - Risks: Low-risk GitHub Actions notice remains for `actions/checkout@v4` running on Node.js 20.
 - Commit hash: not applicable for release publication; tag target is `840f207`.
 - Next recommended stage: Optional maintenance polish for GitHub Actions runner deprecation notice.
+
+## 2026-06-05 - CI warning cleanup
+
+- Source: current maintenance stage
+- Stage name: CI warning cleanup
+- Goal: Remove the GitHub Actions Node.js 20 checkout warning and reduce Windows runner label ambiguity.
+- Files changed: `.github\workflows\audit.yml`, `CHANGELOG.md`, `docs\engineering_log.md`
+- Checks run: Local audit mode, CI audit mode, `git diff --check`, Markdown fence check for changed Markdown files, diff review, and `git status --short --untracked-files=all`
+- Result: Local checks passed. The pushed GitHub Actions run must confirm whether the public warning surface is clean.
+- Risks: Runner-label cleanup depends on GitHub-hosted runner support for `windows-2025-vs2026`; this was checked against GitHub documentation and runner-image metadata before editing.
+- Commit hash: pending.
+- Next recommended stage: Verify the pushed Audit workflow run and confirm warnings are gone.

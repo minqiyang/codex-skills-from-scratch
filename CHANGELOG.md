@@ -4,7 +4,9 @@ This changelog follows a simple Keep a Changelog-style format.
 
 ## [Unreleased]
 
-No changes yet.
+### Changed
+
+- Updated the GitHub Actions Audit workflow to use `actions/checkout@v5` and the explicit `windows-2025-vs2026` runner label.
 
 ## [v0.1.0] - 2026-06-03
 
