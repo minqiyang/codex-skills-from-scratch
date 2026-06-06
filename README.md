@@ -21,16 +21,6 @@ Use this repo if you want a small working system for turning repeatable Codex wo
 - Maintainers who want Skill changes to be auditable, reviewable, and reversible.
 - Users who want examples and templates without automatically installing extra Skills.
 
-### What users get
-
-- A `skill-maker` meta Skill for creating, auditing, reviewing, and updating Skills.
-- A reusable task Skill template.
-- Prompt templates for common Skill Maker workflows.
-- A dry-run-first installer for the user-level Skill Maker.
-- Local and CI audit modes for checking structure and safety references.
-- Example Skills that are not installed unless you explicitly install them.
-- Persistent project logs, release notes, and supervised workflow docs.
-
 ### Quick start: 10-minute path
 
 1. Clone or open the repo, then review the structure and safety rules.
