@@ -156,6 +156,184 @@ Local audit mode also checks the installed user-level Skill Maker. CI audit mode
 4. Put personal cross-project Skills in `%USERPROFILE%\.agents\skills\<skill-name>\SKILL.md`.
 5. Put project-specific Skills in `.agents\skills\<skill-name>\SKILL.md` inside that project.
 
+## How to use Skill Maker
+
+Skill Maker is a meta Skill. In simple terms, it is a Skill for writing and improving other Skills.
+
+Its goal is not to complete one specific task for you. Instead, it helps Codex decide:
+
+- whether a task should become a reusable Skill;
+- what kind of `SKILL.md` should be created;
+- whether an existing Skill should be used, audited, reviewed, or updated;
+- which lessons are reusable, and which details only belong to one task.
+
+Skill Maker keeps Skills short, stable, and easy to verify. A good Skill should not become a very long SOP.
+
+### When to use Skill Maker
+
+Use Skill Maker when:
+
+- you may do the same task again;
+- the task has clear quality standards, such as a report format, code review rules, or a release process;
+- the task uses stable tools, paths, commands, APIs, file formats, or environment setup;
+- a previous run failed, and you want future Codex sessions to avoid the same mistake;
+- you have an AI output and a human-approved version, and you want to turn the difference into a Skill improvement;
+- you want to audit whether a Skill is discoverable, valid, safe, and clear.
+
+Do not use Skill Maker for small one-off questions. For simple translation, wording, or explanation tasks, ask Codex directly.
+
+### Basic calls
+
+In any Codex project, you can start with:
+
+```text
+Use $skill-maker.
+```
+
+For a more explicit request, use:
+
+```text
+Use $skill-maker and decide whether this task should become a reusable Codex Skill.
+```
+
+For a read-only audit, use:
+
+```text
+Use $skill-maker and enter audit mode.
+Do not modify any files.
+```
+
+For retrospective improvement, use:
+
+```text
+Use $skill-maker and enter iteration mode.
+```
+
+## Prompt examples
+
+### Decide whether a task deserves a Skill
+
+```text
+Use $skill-maker.
+
+Goal:
+Decide whether the following task should become a reusable Codex Skill.
+
+Task:
+<describe the task>
+
+Rules:
+1. First decide whether this is a repeatable workflow.
+2. If it is not Skill-worthy, explain why and do not create a Skill.
+3. If it is Skill-worthy, propose a minimal Skill structure.
+4. Do not modify files until you explain the proposed Skill.
+```
+
+### Create a project-specific Skill
+
+```text
+Use $skill-maker and enter new Skill creation mode.
+
+Goal:
+Create a project-specific Codex Skill for this repeated workflow:
+<describe the workflow>
+
+Allowed location:
+.agents\skills\<skill-name>\SKILL.md
+
+Rules:
+- Keep the Skill concise.
+- Include success criteria, known pitfalls, deterministic tools, and verification.
+- Do not include secrets, tokens, .env contents, credentials, or private keys.
+- After creating the Skill, run frontmatter and Markdown code fence checks.
+```
+
+### Use an existing Skill and run a retrospective
+
+```text
+Use $<skill-name> for this task.
+
+After completing the task, run a short retrospective:
+1. Did the Skill help?
+2. What was missing?
+3. What caused friction?
+4. What verified lesson should future Codex sessions know?
+
+Only update the Skill if there is a reusable, verified lesson.
+```
+
+### Audit whether a project needs Skills
+
+```text
+Use $skill-maker and enter audit mode.
+
+Goal:
+Audit this project for repeatable workflows that should become Codex Skills.
+
+Boundaries:
+- Do not modify files.
+- Do not read secrets, .env files, credentials, tokens, or private keys.
+- Use Windows-compatible PowerShell only.
+
+Tasks:
+1. Inspect project instructions and relevant docs.
+2. Identify repeated workflows.
+3. Recommend which workflows should become Skills.
+4. Recommend whether each Skill should be user-level or project-specific.
+5. Do not create or update any Skill in this step.
+```
+
+### Improve a Skill with a gold standard
+
+```text
+Use $skill-maker and enter Skill iteration mode.
+
+Target Skill:
+$<skill-name>
+
+Original task prompt:
+<paste the original prompt>
+
+AI-produced artifact:
+<paste or link to the AI output>
+
+Gold-standard artifact:
+<paste or link to the human-approved version>
+
+Tasks:
+1. Compare the AI-produced artifact against the gold standard.
+2. Identify reusable differences.
+3. Separate reusable lessons from one-off task details.
+4. Propose the minimal Skill update.
+5. Update only success criteria, known pitfalls, deterministic tools, verification, or style constraints.
+6. Do not paste the entire gold standard into the Skill.
+7. Do not add speculative advice.
+8. Run relevant audit checks after editing.
+```
+
+### Verify that a Skill setup is usable
+
+```text
+Use $skill-maker and enter audit mode.
+
+Goal:
+Verify that the current Skill setup can be discovered and used by future Codex sessions.
+
+Strict boundaries:
+- Do not modify files.
+- Do not install software.
+- Do not read secrets, tokens, .env files, credential files, or private keys.
+- Do not modify config.toml.
+
+Tasks:
+1. Confirm the Skill exists in the expected location.
+2. Confirm frontmatter has name and description.
+3. Confirm the description clearly explains when to use the Skill.
+4. Confirm Markdown code fences are balanced.
+5. Check for duplicate Skill names.
+6. Report pass items, risks, and minimal repair steps.
+```
+
 ## Long-running controller
 
 Use `docs\codex_long_running_controller.md` as the stage runner runbook when a future Codex session should advance this repo with minimal supervisor back-and-forth.
