@@ -21,141 +21,6 @@ Use this repo if you want a small working system for turning repeatable Codex wo
 - Maintainers who want Skill changes to be auditable, reviewable, and reversible.
 - Users who want examples and templates without automatically installing extra Skills.
 
-### Quick start: 10-minute path
-
-1. Clone or open the repo, then review the structure and safety rules.
-2. Run the repo-source audit before installation:
-
-```powershell
-.\scripts\audit-skills.ps1 -Mode CI
-```
-
-3. Preview installation:
-
-```powershell
-.\scripts\install.ps1
-```
-
-4. Install only after reviewing the dry-run, then run the local install audit:
-
-```powershell
-.\scripts\install.ps1 -Install
-.\scripts\audit-skills.ps1 -Mode Local
-```
-
-5. In Codex, mention `$skill-maker` for your first repeatable task.
-
-### Safe terminal demo
-
-This is the intended beginner path. The first two commands do not install anything.
-
-```powershell
-.\scripts\audit-skills.ps1 -Mode CI
-.\scripts\install.ps1
-.\scripts\install.ps1 -Install
-.\scripts\audit-skills.ps1 -Mode Local
-```
-
-The `-Install` command is the first command that copies Skill Maker into your user-level Codex Skills folder. Run it only after the dry-run output looks right.
-
-### Safety promise
-
-- Dry-run first: `scripts\install.ps1` changes nothing unless `-Install` is provided.
-- No secrets: this repo is not a place for sensitive values, `.env` contents, credentials, or private keys.
-- Examples stay separate: example Skills are not installed by default.
-- CI included: pushes and pull requests run the audit workflow.
-
-## Why This Repo Exists
-
-Fresh Codex sessions do not automatically carry every project lesson forward unless reusable workflow knowledge is externalized. This repo gives beginners a concrete way to turn those lessons into Skills, scripts, prompts, logs, and release discipline instead of starting from a blank page.
-
-## What Makes This Different
-
-- Skill Maker is a meta Skill for building and improving other Skills.
-- Local audit mode checks the installed user-level Skill Maker; CI mode checks repo source structure.
-- `install.ps1` defaults to dry-run.
-- Examples stay separate from installed Skills.
-- Project logs and handoff context preserve decisions across sessions.
-- The long-running controller supports supervised Codex workflows.
-
-## What problem this solves
-
-Codex Skills are most useful when they capture repeatable workflows, quality standards, known pitfalls, and deterministic checks. Beginners often need a small, safe starting point that shows where Skills live, how to audit them, and how to evolve them without turning every note into a giant instruction file.
-
-This repo gives you that starting point.
-
-## Safe usage rules
-
-- Do not read, write, print, commit, or summarize secrets, tokens, `.env` files, credential files, or private keys.
-- Do not modify `config.toml` unless you explicitly intend to.
-- Do not install software unless you explicitly approve it.
-- Do not use the internet unless you explicitly approve it.
-- Do not turn example Skills into installed Skills unless you explicitly choose to.
-- Do not create or update Skills for trivial one-off tasks.
-- Only write verified, reusable lessons into Skills.
-
-## Path model
-
-Repo source location:
-
-- `<repo-root>`
-
-Installed user-level Skills:
-
-- `%USERPROFILE%\.agents\skills`
-
-Codex global instructions:
-
-- `%USERPROFILE%\.codex\AGENTS.md`
-
-`scripts\install.ps1` copies from the repo source to the installed user-level Skill location.
-
-Example local repo path on one Windows machine:
-
-- `D:\Users\MINQI\Documents\skills`
-
-This is only an example. Your clone can live anywhere.
-
-## Install and audit workflow
-
-Installed Codex locations:
-
-- Codex global instruction file: `%USERPROFILE%\.codex\AGENTS.md`
-- Codex user-level Skill installation location: `%USERPROFILE%\.agents\skills`
-- Installed Skill Maker target: `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md`
-
-Repo source locations:
-
-- Skill Maker source: `skills\skill-maker\SKILL.md`
-- Canonical task Skill template: `templates\task-skill-template.md`
-- Example Skill: `examples\market-research\SKILL.md`
-
-`scripts\install.ps1` defaults to dry-run mode. It only copies `skills\skill-maker\SKILL.md` to `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md` when `-Install` is provided.
-
-`scripts\audit-skills.ps1` checks frontmatter, duplicate Skill names, Markdown code fences, expected safety references, and possible risk patterns.
-
-Local audit mode also checks the installed user-level Skill Maker. CI audit mode checks repo source structure only, because GitHub Actions runners do not have your local Codex Skill installation.
-
-## What this is not
-
-- Not an official OpenAI repo.
-- Not a giant Skill catalog.
-- Not a secret manager.
-- Not a place for API keys.
-- Not an autonomous agent without human supervision.
-
-## Repository name rationale
-
-`codex-skills-from-scratch` is searchable, beginner-friendly, and clear. It names the core topic (`codex-skills`), signals that the repo starts from first principles (`from-scratch`), and avoids implying that this is an official or exhaustive Skill collection.
-
-## Recommended workflow
-
-1. For a trivial one-off task, ask directly and do not create a Skill.
-2. For a repeatable or tool-heavy task, use one of the prompts in `prompt-templates.md`.
-3. When creating a new Skill, start from `templates/task-skill-template.md`.
-4. Put personal cross-project Skills in `%USERPROFILE%\.agents\skills\<skill-name>\SKILL.md`.
-5. Put project-specific Skills in `.agents\skills\<skill-name>\SKILL.md` inside that project.
-
 ## How to use Skill Maker
 
 Skill Maker is a meta Skill. In simple terms, it is a Skill for writing and improving other Skills.
@@ -333,6 +198,92 @@ Tasks:
 5. Check for duplicate Skill names.
 6. Report pass items, risks, and minimal repair steps.
 ```
+
+## Quick start: 10-minute path
+
+1. Clone or open the repo, then review the structure and safety rules.
+2. Run the repo-source audit before installation:
+
+```powershell
+.\scripts\audit-skills.ps1 -Mode CI
+```
+
+3. Preview installation:
+
+```powershell
+.\scripts\install.ps1
+```
+
+4. Install only after reviewing the dry-run, then run the local install audit:
+
+```powershell
+.\scripts\install.ps1 -Install
+.\scripts\audit-skills.ps1 -Mode Local
+```
+
+5. In Codex, mention `$skill-maker` for your first repeatable task.
+
+## Safe terminal demo
+
+This is the intended beginner path. The first two commands do not install anything.
+
+```powershell
+.\scripts\audit-skills.ps1 -Mode CI
+.\scripts\install.ps1
+.\scripts\install.ps1 -Install
+.\scripts\audit-skills.ps1 -Mode Local
+```
+
+The `-Install` command is the first command that copies Skill Maker into your user-level Codex Skills folder. Run it only after the dry-run output looks right.
+
+## Safety promise
+
+- Dry-run first: `scripts\install.ps1` changes nothing unless `-Install` is provided.
+- No secrets: this repo is not a place for sensitive values, `.env` contents, credentials, or private keys.
+- Examples stay separate: example Skills are not installed by default.
+- CI included: pushes and pull requests run the audit workflow.
+
+## Path model
+
+Repo source location:
+
+- `<repo-root>`
+
+Installed user-level Skills:
+
+- `%USERPROFILE%\.agents\skills`
+
+Codex global instructions:
+
+- `%USERPROFILE%\.codex\AGENTS.md`
+
+`scripts\install.ps1` copies from the repo source to the installed user-level Skill location.
+
+Example local repo path on one Windows machine:
+
+- `D:\Users\MINQI\Documents\skills`
+
+This is only an example. Your clone can live anywhere.
+
+## Install and audit workflow
+
+Installed Codex locations:
+
+- Codex global instruction file: `%USERPROFILE%\.codex\AGENTS.md`
+- Codex user-level Skill installation location: `%USERPROFILE%\.agents\skills`
+- Installed Skill Maker target: `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md`
+
+Repo source locations:
+
+- Skill Maker source: `skills\skill-maker\SKILL.md`
+- Canonical task Skill template: `templates\task-skill-template.md`
+- Example Skill: `examples\market-research\SKILL.md`
+
+`scripts\install.ps1` defaults to dry-run mode. It only copies `skills\skill-maker\SKILL.md` to `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md` when `-Install` is provided.
+
+`scripts\audit-skills.ps1` checks frontmatter, duplicate Skill names, Markdown code fences, expected safety references, and possible risk patterns.
+
+Local audit mode also checks the installed user-level Skill Maker. CI audit mode checks repo source structure only, because GitHub Actions runners do not have your local Codex Skill installation.
 
 ## Long-running controller
 
