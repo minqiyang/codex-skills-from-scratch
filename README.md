@@ -10,29 +10,19 @@ A beginner-friendly starter repo for creating, auditing, installing, and evolvin
 
 Latest release: [v0.1.0](docs/release_notes_v0.1.0.md)
 
-## Start Here
-
+# Why skill Maker
 Use this repo if you want a small working system for turning repeatable Codex work into reusable Skills, scripts, prompts, logs, and checks.
-
-### Who this is for
-
-- Beginners who want a clear first Codex Skills setup.
-- Builders who want reusable personal or project-specific Codex workflows.
-- Maintainers who want Skill changes to be auditable, reviewable, and reversible.
-- Users who want examples and templates without automatically installing extra Skills.
 
 ## How to use Skill Maker
 
-Skill Maker is a meta Skill. In simple terms, it is a Skill for writing and improving other Skills.
+Skill Maker is a Skill for writing and improving other Skills.
 
-Its goal is not to complete one specific task for you. Instead, it helps Codex decide:
+It helps Codex decide:
 
 - whether a task should become a reusable Skill;
 - what kind of `SKILL.md` should be created;
 - whether an existing Skill should be used, audited, reviewed, or updated;
 - which lessons are reusable, and which details only belong to one task.
-
-Skill Maker keeps Skills short, stable, and easy to verify. A good Skill should not become a very long SOP.
 
 ### When to use Skill Maker
 
@@ -44,8 +34,6 @@ Use Skill Maker when:
 - a previous run failed, and you want future Codex sessions to avoid the same mistake;
 - you have an AI output and a human-approved version, and you want to turn the difference into a Skill improvement;
 - you want to audit whether a Skill is discoverable, valid, safe, and clear.
-
-Do not use Skill Maker for small one-off questions. For simple translation, wording, or explanation tasks, ask Codex directly.
 
 ### Basic calls
 
@@ -224,8 +212,6 @@ Tasks:
 5. In Codex, mention `$skill-maker` for your first repeatable task.
 
 ## Safe terminal demo
-
-This is the intended beginner path. The first two commands do not install anything.
 
 ```powershell
 .\scripts\audit-skills.ps1 -Mode CI
