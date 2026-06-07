@@ -10,7 +10,8 @@ A beginner-friendly starter repo for creating, auditing, installing, and evolvin
 
 Latest release: [v0.1.0](docs/release_notes_v0.1.0.md)
 
-# Why skill Maker
+## Why Skill Maker
+
 Use this repo if you want a small working system for turning repeatable Codex work into reusable Skills, scripts, prompts, logs, and checks.
 
 ## How to use Skill Maker
@@ -64,7 +65,8 @@ Use $skill-maker and enter iteration mode.
 
 ## Prompt examples
 
-### Decide whether a task deserves a Skill
+<details>
+<summary>Decide whether a task deserves a Skill</summary>
 
 ```text
 Use $skill-maker.
@@ -82,7 +84,10 @@ Rules:
 4. Do not modify files until you explain the proposed Skill.
 ```
 
-### Create a project-specific Skill
+</details>
+
+<details>
+<summary>Create a project-specific Skill</summary>
 
 ```text
 Use $skill-maker and enter new Skill creation mode.
@@ -101,7 +106,10 @@ Rules:
 - After creating the Skill, run frontmatter and Markdown code fence checks.
 ```
 
-### Use an existing Skill and run a retrospective
+</details>
+
+<details>
+<summary>Use an existing Skill and run a retrospective</summary>
 
 ```text
 Use $<skill-name> for this task.
@@ -115,7 +123,10 @@ After completing the task, run a short retrospective:
 Only update the Skill if there is a reusable, verified lesson.
 ```
 
-### Audit whether a project needs Skills
+</details>
+
+<details>
+<summary>Audit whether a project needs Skills</summary>
 
 ```text
 Use $skill-maker and enter audit mode.
@@ -136,7 +147,10 @@ Tasks:
 5. Do not create or update any Skill in this step.
 ```
 
-### Improve a Skill with a gold standard
+</details>
+
+<details>
+<summary>Improve a Skill with a gold standard</summary>
 
 ```text
 Use $skill-maker and enter Skill iteration mode.
@@ -164,7 +178,10 @@ Tasks:
 8. Run relevant audit checks after editing.
 ```
 
-### Verify that a Skill setup is usable
+</details>
+
+<details>
+<summary>Verify that a Skill setup is usable</summary>
 
 ```text
 Use $skill-maker and enter audit mode.
@@ -187,31 +204,11 @@ Tasks:
 6. Report pass items, risks, and minimal repair steps.
 ```
 
-## Quick start: 10-minute path
+</details>
 
-1. Clone or open the repo, then review the structure and safety rules.
-2. Run the repo-source audit before installation:
+## Quick start
 
-```powershell
-.\scripts\audit-skills.ps1 -Mode CI
-```
-
-3. Preview installation:
-
-```powershell
-.\scripts\install.ps1
-```
-
-4. Install only after reviewing the dry-run, then run the local install audit:
-
-```powershell
-.\scripts\install.ps1 -Install
-.\scripts\audit-skills.ps1 -Mode Local
-```
-
-5. In Codex, mention `$skill-maker` for your first repeatable task.
-
-## Safe terminal demo
+Clone the repo, review the safety rules, then run the safe path below:
 
 ```powershell
 .\scripts\audit-skills.ps1 -Mode CI
@@ -220,7 +217,7 @@ Tasks:
 .\scripts\audit-skills.ps1 -Mode Local
 ```
 
-The `-Install` command is the first command that copies Skill Maker into your user-level Codex Skills folder. Run it only after the dry-run output looks right.
+Use `-Mode CI` before installation. Use `-Mode Local` after installing Skill Maker. The `-Install` command is the first command that copies Skill Maker into your user-level Codex Skills folder.
 
 ## Safety promise
 
@@ -229,90 +226,22 @@ The `-Install` command is the first command that copies Skill Maker into your us
 - Examples stay separate: example Skills are not installed by default.
 - CI included: pushes and pull requests run the audit workflow.
 
-## Path model
+## Paths and files
 
-Repo source location:
-
-- `<repo-root>`
-
-Installed user-level Skills:
-
-- `%USERPROFILE%\.agents\skills`
-
-Codex global instructions:
-
-- `%USERPROFILE%\.codex\AGENTS.md`
-
-`scripts\install.ps1` copies from the repo source to the installed user-level Skill location.
-
-Example local repo path on one Windows machine:
-
-- `D:\Users\MINQI\Documents\skills`
-
-This is only an example. Your clone can live anywhere.
-
-## Install and audit workflow
-
-Installed Codex locations:
-
-- Codex global instruction file: `%USERPROFILE%\.codex\AGENTS.md`
-- Codex user-level Skill installation location: `%USERPROFILE%\.agents\skills`
-- Installed Skill Maker target: `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md`
-
-Repo source locations:
-
-- Skill Maker source: `skills\skill-maker\SKILL.md`
-- Canonical task Skill template: `templates\task-skill-template.md`
+- Repo source: `<repo-root>`
+- Installed user-level Skills: `%USERPROFILE%\.agents\skills`
+- Installed Skill Maker: `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md`
+- Repo Skill Maker source: `skills\skill-maker\SKILL.md`
+- Task Skill template: `templates\task-skill-template.md`
 - Example Skill: `examples\market-research\SKILL.md`
+- Installer: `scripts\install.ps1`
+- Audit script: `scripts\audit-skills.ps1`
 
-`scripts\install.ps1` defaults to dry-run mode. It only copies `skills\skill-maker\SKILL.md` to `%USERPROFILE%\.agents\skills\skill-maker\SKILL.md` when `-Install` is provided.
+## More resources
 
-`scripts\audit-skills.ps1` checks frontmatter, duplicate Skill names, Markdown code fences, expected safety references, and possible risk patterns.
-
-Local audit mode also checks the installed user-level Skill Maker. CI audit mode checks repo source structure only, because GitHub Actions runners do not have your local Codex Skill installation.
-
-## Long-running controller
-
-Use `docs\codex_long_running_controller.md` as the stage runner runbook when a future Codex session should advance this repo with minimal supervisor back-and-forth.
-
-## GitHub workflow
-
-Use `docs\github_workflow.md` for the private GitHub setup checklist, PR approval gates, and Codex review workflow.
-
-Pull requests and pushes run `.github\workflows\audit.yml`, which executes the Skill audit on a Windows runner and checks `git diff --check`.
-
-## Skill Maker behavior evals
-
-Use `docs\skill_maker_behavior_evals.md` for lightweight manual prompts that check whether Skill Maker behaves correctly in common scenarios.
-
-## Project logs
-
-- `CHANGELOG.md`: user-facing changes by release state.
-- `docs\engineering_log.md`: chronological stage history, files changed, checks, results, and risks.
-- `docs\decision_log.md`: concise ADR-style decisions and consequences.
-- `docs\troubleshooting_log.md`: problems encountered, fixes, and prevention notes.
-- `docs\project_journal.md`: readable narrative overview and lessons learned.
-
-## Project policies
-
-- License: `LICENSE`
-- Contribution guide: `CONTRIBUTING.md`
-- Safety reporting: `SECURITY.md`
-
-## Manual verification
-
-Inside Codex, run `/skills` or explicitly mention `$skill-maker`.
-
-From a terminal, you can also run:
-
-```powershell
-codex --ask-for-approval never "Summarize the current instructions and tell me whether the skill-maker Skill is available."
-```
-
-## Files here
-
-- `prompt-templates.md`: reusable daily prompts for Skill-first work.
-- `templates/task-skill-template.md`: the standard structure for new task Skills.
-- `examples/market-research/SKILL.md`: an example Skill showing the expected level of detail.
-- `scripts/install.ps1`: dry-run by default installer for the Skill Maker.
-- `scripts/audit-skills.ps1`: read-only local audit for this starter repo.
+- `prompt-templates.md`: reusable Skill-first prompts.
+- `docs\skill_maker_behavior_evals.md`: manual behavior eval prompts.
+- `docs\codex_long_running_controller.md`: supervised stage-runner workflow.
+- `docs\github_workflow.md`: GitHub setup and review workflow.
+- `CHANGELOG.md` and `docs\engineering_log.md`: project history.
+- `CONTRIBUTING.md`, `SECURITY.md`, and `LICENSE`: project policies.
