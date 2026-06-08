@@ -29,12 +29,9 @@ It helps Codex decide:
 
 Use Skill Maker when:
 
-- you may do the same task again;
-- the task has clear quality standards, such as a report format, code review rules, or a release process;
-- the task uses stable tools, paths, commands, APIs, file formats, or environment setup;
+- you may do the similar task again;
 - a previous run failed, and you want future Codex sessions to avoid the same mistake;
 - you have an AI output and a human-approved version, and you want to turn the difference into a Skill improvement;
-- you want to audit whether a Skill is discoverable, valid, safe, and clear.
 
 ### Basic calls
 
