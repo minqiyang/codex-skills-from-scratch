@@ -213,8 +213,32 @@ function Get-AllowedReferenceReason {
         return 'expected .gitignore exclusion pattern'
     }
 
+    $Lower = $Trimmed.ToLowerInvariant()
+    if ($RelativePath -like 'skills\codex-long-session-governance\*') {
+        if (
+            $Lower -match '\btoken\b' -or
+            $Lower -match '\btokens\b' -or
+            $Lower -match '\btoken budget\b' -or
+            $Lower -match '\btoken use\b' -or
+            $Lower -match '\bguardrail' -or
+            $Lower -match '\bdo not\b' -or
+            $Lower -match '\bnot\b' -or
+            $Lower -match '\bwithout\b' -or
+            $Lower -match '\bunless\b' -or
+            $Lower -match '\bstop\b' -or
+            $Lower -match '\bcredential' -or
+            $Lower -match '\bsecret' -or
+            $Lower -match '\bapi key' -or
+            $Lower -match '\bprivate key' -or
+            $Lower -match '\bconfig\.toml\b' -or
+            $Lower -match '\bsensitive-keyword\b' -or
+            $Lower -match '\braw data\b'
+        ) {
+            return 'approved long-session governance guardrail wording'
+        }
+    }
+
     if ($RelativePath -like 'docs\*' -or $File.Name -in @('README.md', 'prompt-templates.md')) {
-        $Lower = $Trimmed.ToLowerInvariant()
         if (
             $Lower -match '\bdo not\b' -or
             $Lower -match '\bnot\b' -or
