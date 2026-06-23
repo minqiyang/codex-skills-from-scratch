@@ -51,7 +51,11 @@ For long `/goal` sessions, the launch prompt should stay short and index-like. D
 - Oversized `/goal` prompts are compressed into an index-style controller without dropping hard requirements.
 - Detailed stage specs, current state, permanent rules, and historical logs are placed in the right document type.
 - Repo work advances one small PR-sized stage at a time.
-- PR gates, dirty worktrees, truncation, destructive operations, and high-risk ambiguity stop the workflow.
+- PR gates, dirty worktrees, truncation, destructive operations, and high-risk
+  or unclear ambiguity stop the workflow.
+- Non-high-risk PRs may use GitHub-managed auto-merge or normal protected PR
+  merge only after risk, trusted author/pusher identity, branch protection,
+  required checks, and required reviews are verified.
 - Final reports are concise and do not paste full logs, full generated reports, or raw data.
 
 ## Inputs and context to collect
@@ -76,7 +80,7 @@ Use these invariants:
 - Byte-cap unknown output.
 - Summarize; do not paste.
 - One PR-sized stage at a time.
-- Stop at merge gates.
+- Stop at merge gates unless the PR satisfies the protected PR merge policy.
 - Paused External PR Gate State: An open or not-verified-merged PR gate is an
   external wait state. After reporting it once, Codex must pause the active
   goal and wait for explicit user resume. Automatic continuation without a
@@ -85,7 +89,10 @@ Use these invariants:
   mark the goal blocked merely because the same external PR is still pending.
 - If the interface forces a response during the paused external PR gate state,
   return only: `Waiting for PR #X to merge; no checks run.`
-- Never merge PRs.
+- Never direct-push or direct-merge to the protected base branch.
+- Never bypass branch protection, rulesets, required checks, required reviews,
+  or merge queue requirements.
+- Never use admin override, including `gh pr merge --admin`.
 - Do not rely on truncated output.
 - Keep `/goal` short; place durable instructions in the right source of truth.
 - Update handoff before context becomes stale or oversized.
@@ -414,11 +421,14 @@ Final reports should include only relevant items from this list:
 - changed files;
 - checks run;
 - risk classification;
-- auto-merge status if a PR exists;
+- trusted author/pusher verification when a PR exists;
+- branch protection, required checks, and required review verification when a PR exists;
+- auto-merge or normal protected PR merge status if a PR exists;
 - issues by severity;
 - assumptions;
 - next recommended stage;
-- confirmation that Codex did not merge PRs.
+- confirmation that no direct push, direct merge, `--admin`, or protection bypass
+  was used.
 
 ## Repo Workflow Governance
 
@@ -449,37 +459,57 @@ Stop conditions:
 - dirty worktree before new stage;
 - PR gate not verified merged, including open, closed-unmerged, unknown, or
   otherwise unproven merge state;
-- high/medium risk ambiguity;
+- high or unclear risk;
 - failing checks not safely fixable within scope;
 - need for credentials or external access;
 - destructive operation;
 - scope conflict;
-- after opening a PR.
+- after opening a PR that is not eligible for GitHub-managed auto-merge or
+  normal protected PR merge.
 
-Never merge PRs.
+After opening a PR, Codex may enable GitHub auto-merge or perform a normal
+protected PR merge only when the protected PR merge policy below allows it.
 
-## Conservative GitHub Auto-Merge Policy
+## Protected PR Merge Policy
 
-Direct merge and GitHub auto-merge are different. Codex must never direct-merge
-to `main`, bypass branch protection, or use `gh pr merge --admin`.
+Direct merge, normal protected PR merge, and GitHub auto-merge are different.
+Codex must create PRs for reviewability and branch protection. Codex must never
+direct-push or direct-merge to the protected base branch, bypass branch
+protection or rulesets, skip required checks or reviews, bypass merge queue
+requirements, or use admin override such as `gh pr merge --admin`.
 
-Codex may enable GitHub auto-merge only for clearly low-risk small PRs when
-repository protections are present and verifiable. Auto-merge means GitHub
-performs the final merge only after required reviews, required checks, branch
-protection, and merge queue requirements are satisfied.
+Codex may enable GitHub auto-merge or perform a normal protected PR merge only
+when all of these are true:
 
-Do not enable auto-merge if required checks, reviews, branch protection, or
-merge queue requirements cannot be verified. Do not enable auto-merge if the
-repository has no required CI or check protection.
+- the PR is not high-risk and risk is not unclear;
+- the PR is authored and pushed by the trusted account specified by the user or
+  repo policy, verified from GitHub PR metadata rather than local git config;
+- branch protection or rulesets are verifiable;
+- required checks pass, or auto-merge is enabled while checks are pending;
+- no required review is pending;
+- changed-file scope matches the declared stage;
+- no merge queue, conflict, or protection state blocks the merge path.
 
-Stop for human review on medium-risk, high-risk, compliance-ambiguous,
-destructive, security-sensitive, dependency-changing, credential-touching,
-generated-output-heavy, public-API-changing, unclear, unprotected, or
-judgment-heavy PRs.
+If author or pusher identity cannot be verified, stop for human review. If
+protection, required checks, required reviews, merge queue, or conflict status
+cannot be verified, stop for human review.
 
-Final reports for PR work must state the risk classification and auto-merge
-status, and must clearly distinguish "direct merge not performed" from
-"GitHub auto-merge enabled" when relevant.
+If CI is pending, Codex may enable GitHub auto-merge and wait only for a bounded
+period. If the PR remains pending, unstable, blocked, or unclear after that
+bounded wait, pause and report the gate.
+
+If GitHub merges the PR during the run, Codex may sync the base branch and
+continue the next PR-sized stage when local repo rules allow continuing.
+
+Generated-output-heavy PRs are not automatically human-gated merely because
+they are generated-output-heavy. They may use the protected PR merge path when
+they are non-high-risk, synthetic/local-only as applicable, fully validated, and
+pushed by the trusted account.
+
+Final reports for PR work must state risk classification, trusted author/pusher
+verification, branch protection/check/review verification, auto-merge or normal
+protected PR merge status, and confirmation that no direct merge, no `--admin`,
+and no protection bypass were used.
 
 Paused External PR Gate State: An open or not-verified-merged PR gate is an
 external wait state. After reporting it once, Codex must pause the active goal
@@ -500,19 +530,28 @@ High risk:
 
 - destructive file operations;
 - credential or secrets access;
-- production data;
+- credentials, secrets, tokens, `.env`, SSH keys, or sensitive config;
+- production data or real private data;
+- real data fetching, vendor APIs, downloads, or external market data clients;
 - live or paper trading or order execution;
+- brokerage integration;
+- branch protection or ruleset weakening;
+- dependency or supply-chain changes;
 - schema migration;
 - broad file deletion;
 - uncertain merge state;
+- failed or skipped validation;
 - security-sensitive changes.
+- public API breaking changes;
+- unclear scope;
+- profitability, trading-readiness, or execution-realism claims.
 
 Medium risk:
 
 - large refactor;
 - ambiguous requirements;
 - public API changes;
-- modifying generated outputs;
+- large generated-output changes with unclear provenance or incomplete validation;
 - changing tests to fit code;
 - adding dependencies;
 - creating durable helper scripts in target repo.
@@ -528,8 +567,9 @@ Low risk:
 
 Behavior:
 
-- high risk: stop and ask for confirmation;
-- medium risk: stop or present plan before changing;
+- high or unclear risk: stop for human review;
+- medium risk: may use protected PR merge only if it is not high-risk or
+  unclear, all checks pass, and changed-file scope matches the declared stage;
 - low risk: make a reasonable assumption, document it, continue.
 
 ## Truncation Recovery
@@ -597,7 +637,9 @@ Before finishing a governed long-session task, check:
 - PR gate was checked once when tooling and authorization allowed it, and any
   not-verified-merged PR gate entered the paused external PR gate state without
   repeated polling, repeated reports, goal completion, or blocked status;
-- no PR was merged;
+- any auto-merge or normal protected PR merge followed the protected PR merge
+  policy;
+- no direct push, direct merge, `--admin`, or branch-protection bypass was used;
 - final output is concise and reports checks, changed files, blockers, assumptions, and next action.
 
 ## Skill Maintenance / Retrospective

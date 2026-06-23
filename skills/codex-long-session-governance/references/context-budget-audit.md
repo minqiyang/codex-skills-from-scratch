@@ -34,11 +34,19 @@ Use this lightweight checklist to audit a long-session governance run or the Ski
 - Stop gates are preserved after compression.
 - Validation commands are preserved after compression.
 - Prompt compression removes explanation and repetition, not requirements.
-- Does the policy distinguish direct merge from GitHub auto-merge?
-- Does it forbid `--admin`?
-- Does it require verifiable branch protection/checks/reviews?
-- Does it stop when risk is medium/high/unclear?
-- Does final report include risk classification and auto-merge status?
+- Does the policy distinguish direct merge, normal protected PR merge, and
+  GitHub auto-merge?
+- Does it forbid direct-pushing or direct-merging to protected base branches?
+- Does it forbid `--admin` and branch-protection/ruleset bypass?
+- Does it require trusted author/pusher verification from GitHub PR metadata?
+- Does it require verifiable branch protection, required checks, required
+  reviews, merge queue status, and changed-file scope?
+- Does it stop when risk is high or unclear?
+- Does it allow medium-risk PRs only when they are not high-risk or unclear,
+  checks pass, and scope matches the declared stage?
+- Does final report include risk classification, author/pusher verification,
+  protection/check/review verification, and auto-merge or normal protected PR
+  merge status?
 - Does the workflow avoid rerunning checks, protection queries, review queries,
   or baseline validation while a previous PR is not verified merged?
 - No secrets, `.env` content, credentials, tokens, SSH keys, API keys, or `config.toml` content are read or modified.
